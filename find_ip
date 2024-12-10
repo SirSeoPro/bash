@@ -1,0 +1,12 @@
+#!/bin/bash
+trap 'echo "exit"; exit 1' 2
+    for i in {1..255}; do
+        ip_device="10.104.${i}.1/24"
+        ip_ping="10.104.${i}.9"
+        ip_ping2="10.104.${i}.10"
+        ip addr add "$ip_device" dev enp0s31f6
+        ping -c 1 "$ip_ping" >> ./ping_log_104
+        ping -c 1 "$ip_ping2" >> ./ping_log_104
+        ip addr del "$ip_device" dev enp0s31f6
+    done
+sudo grep -B1 "1 received" ping_log_104
